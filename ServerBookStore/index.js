@@ -64,3 +64,47 @@ app.get('/book',function(req,res){
         }
     })
 })
+
+//multer
+var multer = require('multer')
+var storage = multer.diskStorage({
+    destination: function(req,file,cb){
+        cb(null,'./public/upload')
+    },
+    filename: function(req,file,cb){
+        cb(null,Date.now()+"-"+file.originalname) //cau hinh ten file tranh trunn file
+    }
+})
+var upload = multer({
+    storage: storage,
+    fileFilter: function(req,file,cb){
+        console.log(file)
+        if( file.mimetype=='image/jpg' || 
+            file.mimetype=='image/png' ||
+            file.mimetype=='image/jpeg')
+        {
+            cb(null,true)
+        }
+        else{
+            return cb(new Error('Only image are allowed'))
+        }
+    }
+}).single('BookImage') //name thu muc hinh o form
+
+app.post('/book',function(req,res){
+    //upload image
+    upload(req,res, function(err){
+        if(err instanceof multer.MulterError){
+            console.log('A Multer error occurred when uploading')
+            res.json({kq: 0, 'err: ': err})
+        }else if(err){
+            console.log('An unknown error occurred when uploading: '+err)
+            res.json({kq: 0, 'err': err})
+        }else{
+            console.log('Upload is okay')
+            console.log(req.file) //thong tin file da upload
+            res.send({kq:1, 'file': req.file})
+        }
+    })
+    //Save Book
+})
