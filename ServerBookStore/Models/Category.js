@@ -7,3 +7,4 @@ const categorySchema = new mongodb.Schema({
 
 module.exports = mongodb.model('Category', categorySchema);
 
+

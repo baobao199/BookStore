@@ -14,6 +14,7 @@ app.use(bodyParser.urlencoded({extended:true}))
 app.listen(3000);
 //moonges
 const mongoose = require('mongoose');
+mongoose.set('useFindAndModify', false)
 const { FormBuilder } = require('@angular/forms')
 mongoose.connect('mongodb+srv://baobao199:baobao199@cluster0.c12op.mongodb.net/BookStore?retryWrites=true&w=majority', {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
     if(err){
@@ -103,8 +104,36 @@ app.post('/book',function(req,res){
         }else{
             console.log('Upload is okay')
             console.log(req.file) //thong tin file da upload
-            res.send({kq:1, 'file': req.file})
+            //res.send({kq:1, 'file': req.file})
+            
+            //Save Book
+            var book = new Book({
+                name: req.body.txtName,
+                image: req.file.fieldname,
+                file: req.file.txtFile
+            })
+            //res.json(book)
+            book.save(function(err){
+                if(err){
+                    res.json({
+                        kq:0,
+                        'err': "error upload book"
+                    })
+                }
+                else{
+                    //save book
+                    Category.findOneAndUpdate(
+                        {_id:req.body.selectCate},
+                        { $push: {Books_id: book._id} },
+                        function(err){
+                            if(err){
+                                res.json({kq:0, 'err': err})
+                            }else{
+                                res.json({kq:1})
+                            }
+                    })
+                }
+            })
         }
     })
-    //Save Book
 })
