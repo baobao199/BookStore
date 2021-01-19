@@ -1,0 +1,11 @@
+/* You can add global styles to this file, and also import other style files */
+img{
+    object-fit: cover;
+    vertical-align: middle;
+    border-style: none;
+    height: 70vh;
+}
+
+.user{float: right;}
+
+menu{padding-inline-start: 0px !important;}
