@@ -22,9 +22,10 @@ mongoose.connect('mongodb+srv://baobao199:baobao199@cluster0.c12op.mongodb.net/B
         console.log("MongoDB connected successfully")
     }
 });
-
-const Category = require('./Models/Categories') //them model
-
+//add Model
+const Category = require('./Models/Category')
+const Book = require('./Models/Book')
+//-Model
 app.get('/',function(req,res){
     res.render('home')
 })
@@ -48,6 +49,18 @@ app.post('/cate',function(req,res){
         else{
             console.log('Save successfully')
             res.json({kq:1})
+        }
+    })
+})
+
+app.get('/book',function(req,res){
+    Category.find(function(err,items){
+        if(err){
+            console.log('Error')
+        }
+        else{
+            console.log(items)
+            res.render('book',{Cates:items})
         }
     })
 })
