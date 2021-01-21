@@ -12,6 +12,14 @@ app.use(bodyParser.urlencoded({extended:true}))
 //--body-parser
 
 app.listen(3000);
+//set up
+app.use(function(req,res,next){
+    res.setHeader('Access-Control-Allow-Origin','http://localhost:4200')
+    res.hasHeader('Access-Control-Allow-Methods','GET,POST,OPTIONS,PUT,PATCH,DELETE')
+    res.setHeader('Access-Control-Allow-Headers','X-Requested-With,content-type')
+    res.setHeader('Access-Control-Allow-Credentials',true)
+    next()
+})
 //moonges
 const mongoose = require('mongoose');
 mongoose.set('useFindAndModify', false)
@@ -26,6 +34,19 @@ mongoose.connect('mongodb+srv://baobao199:baobao199@cluster0.c12op.mongodb.net/B
 //add Model
 const Category = require('./Models/Category')
 const Book = require('./Models/Book')
+
+//postman
+app.post('/api/cate', function(req,res){
+    Category.find(function(err,items){
+        if(err){
+            res.json({kq:0, 'err':err})
+        }else{
+            res.json(items)
+        }
+    })
+})
+
+
 //-Model
 app.get('/',function(req,res){
     res.render('home')
