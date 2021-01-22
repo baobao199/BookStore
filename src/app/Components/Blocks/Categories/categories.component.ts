@@ -8,9 +8,11 @@ import {CategoryService}  from '../../../Services/category.module'
 })
 
 export class CategoriesComponent {
+    arrCate:any = []
     constructor(private cateService: CategoryService){
         cateService.getCaterogy().subscribe(data=>{
             console.log(data)
+            this.arrCate = data
         })
     }
 }
