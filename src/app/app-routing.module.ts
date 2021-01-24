@@ -10,7 +10,6 @@ import {DetailComponent} from './Components/Pages/Detail/detail.component'
 const routesConfig: Routes = [
   {path:'category',component: CategoryComponent},
   {path:'detail',component: DetailComponent},
-  {path:'detail/:id',component: DetailComponent},
   {path:'**', component: HomeComponent} //default direct Home
 ]
 

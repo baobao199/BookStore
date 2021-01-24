@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <style>
+      h1{
+        text-align: center;
+      }
+      .table{
+        width: 500px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      a{
+        margin-left: 450px;
+      }
+    </style>
+</head>
+<body>
+  <h1>LIST OF BOOK TYPES OR GENRES</h1>
+  <a href="/addcategory"><button type="button" class="btn btn-info">Add Genre</button></a>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">No</th>
+        <th scope="col">Name Gener</th>
+        <th scope="col">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% listCategories.forEach(function(cate,index){ %>
+        <tr>
+          <th scope="row"><%- index + 1 %></th>
+          <td><%- cate.name %></td>
+          <td>
+            <form action="" method="POST">
+              <button type="submit" class="btn btn-danger">Delete</button>
+            </form>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</body>
+</html>

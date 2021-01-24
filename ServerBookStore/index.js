@@ -45,9 +45,7 @@ app.post('/api/cate', function(req,res){
         }
     })
 })
-
-
-//-Model
+//Model
 app.get('/',function(req,res){
     res.render('home')
 })
@@ -55,8 +53,24 @@ app.get('/',function(req,res){
 app.get('/cate',function(req,res){
     res.render('cate')
 })
+//--model
 
-app.post('/cate',function(req,res){
+//get list categories from mongoDB
+app.get('/category',function(req,res){
+    Category.find(function(err,items){
+        if(err){
+            console.log('err')
+        }
+        else{
+            res.render('Category/Category',{listCategories:items})
+        }
+    })
+})
+app.get('/addcategory',function(req,res){
+    res.render('Category/AddCategory')
+})
+
+app.post('/addcategory',function(req,res){
     //res.send(req.body.txtCate)
     var newCate = new Category({
         name: req.body.txtCate,
@@ -70,10 +84,12 @@ app.post('/cate',function(req,res){
         }
         else{
             console.log('Save successfully')
-            res.json({kq:1})
+            //res.json({kq:1})
+            res.redirect('/category');
         }
     })
 })
+
 
 app.get('/book',function(req,res){
     Category.find(function(err,items){

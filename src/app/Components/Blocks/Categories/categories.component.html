@@ -1,6 +1,6 @@
 <ul class="list-group">
     <li *ngFor="let cate of arrCate" class="list-group-item d-flex justify-content-between align-items-center">
-      <a href=""> {{cate.name}} </a>
+      <a [routerLink]="['/category/'+cate._id]"> {{cate.name}} </a>
       <span class="badge bg-primary rounded-pill">14</span>
     </li>
   </ul>
