@@ -49,7 +49,6 @@ app.post('/api/cate', function(req,res){
 app.get('/',function(req,res){
     res.render('home')
 })
-
 app.get('/cate',function(req,res){
     res.render('cate')
 })
@@ -89,20 +88,9 @@ app.post('/addcategory',function(req,res){
         }
     })
 })
+//--category
 
-
-app.get('/book',function(req,res){
-    Category.find(function(err,items){
-        if(err){
-            console.log('Error')
-        }
-        else{
-            console.log(items)
-            res.render('book',{Cates:items})
-        }
-    })
-})
-
+//image
 //multer
 var multer = require('multer')
 var storage = multer.diskStorage({
@@ -127,10 +115,34 @@ var upload = multer({
             return cb(new Error('Only image are allowed'))
         }
     }
-}).single('BookImage') //name thu muc hinh o form
+}).single('txtImage') //name thu muc hinh o form
+//--image
 
-app.post('/book',function(req,res){
-    //upload image
+app.get('/book',function(req,res){
+    Book.find(function(err,items){
+        if(err){
+            console.log('err')
+        }
+        else{
+            //console.log(items)
+            res.render('Book/book',{listBooks:items})
+        }
+    })
+    
+})
+
+app.get('/addbook',function(req,res){
+    Category.find(function(err,items){
+        if(err){
+            console.log('Error')
+        }
+        else{
+            console.log(items)
+            res.render('Book/addbook',{Cates:items})
+        }
+    })
+})
+app.post('/addbook',function(req,res){
     upload(req,res, function(err){
         if(err instanceof multer.MulterError){
             console.log('A Multer error occurred when uploading')
@@ -145,9 +157,13 @@ app.post('/book',function(req,res){
             
             //Save Book
             var book = new Book({
+                image: req.file.path,
                 name: req.body.txtName,
-                image: req.file.fieldname,
-                file: req.file.txtFile
+                author: req.body.txtAuthor,
+                price: req.body.txtPrice,
+                pubCompany: req.body.txtPubCompany,
+                datePublic: req.body.txtDatePublic,
+                description: req.body.txtDescrip,
             })
             //res.json(book)
             book.save(function(err){
@@ -174,3 +190,65 @@ app.post('/book',function(req,res){
         }
     })
 })
+
+
+
+
+
+
+// app.get('/book',function(req,res){
+//     Category.find(function(err,items){
+//         if(err){
+//             console.log('Error')
+//         }
+//         else{
+//             console.log(items)
+//             res.render('book',{Cates:items})
+//         }
+//     })
+// })
+// app.post('/book',function(req,res){
+//     //upload image
+//     upload(req,res, function(err){
+//         if(err instanceof multer.MulterError){
+//             console.log('A Multer error occurred when uploading')
+//             res.json({kq: 0, 'err: ': err})
+//         }else if(err){
+//             console.log('An unknown error occurred when uploading: '+err)
+//             res.json({kq: 0, 'err': err})
+//         }else{
+//             console.log('Upload is okay')
+//             console.log(req.file) //thong tin file da upload
+//             //res.send({kq:1, 'file': req.file})
+            
+//             //Save Book
+//             var book = new Book({
+//                 name: req.body.txtName,
+//                 image: req.file.fieldname,
+//                 file: req.file.txtFile
+//             })
+//             //res.json(book)
+//             book.save(function(err){
+//                 if(err){
+//                     res.json({
+//                         kq:0,
+//                         'err': "error upload book"
+//                     })
+//                 }
+//                 else{
+//                     //save book
+//                     Category.findOneAndUpdate(
+//                         {_id:req.body.selectCate},
+//                         { $push: {Books_id: book._id} },
+//                         function(err){
+//                             if(err){
+//                                 res.json({kq:0, 'err': err})
+//                             }else{
+//                                 res.json({kq:1})
+//                             }
+//                     })
+//                 }
+//             })
+//         }
+//     })
+// })
