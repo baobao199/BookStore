@@ -88,6 +88,44 @@ app.post('/addcategory',function(req,res){
         }
     })
 })
+//delete by id cate
+app.post('/category',function(req,res){
+    let idCate = req.body.idCategory
+    Category.findByIdAndRemove(idCate,function(err){
+        if(err){
+            console.log('err')
+        }else{
+            res.redirect('/category')    
+        }
+    })
+})
+app.post('/book',function(req,res){
+
+    idCate = req.body.idCategory
+    Category.findById(idCate,function(err,items){
+        if(err){
+            console.log(err)
+        }
+        else{
+            items.Books_id.forEach(element => {
+                list
+                Book.findById(element,function(err,items){
+                    if(err){
+                        console.log(err)
+                    }
+                    else{
+                        // res.render('Book/book',{listBooks:items})
+                    }
+                    
+                })
+            }); 
+            
+        }
+
+    })
+})
+//get by id cate
+
 //--category
 
 //image
@@ -191,7 +229,6 @@ app.post('/addbook',function(req,res){
         }
     })
 })
-
 
 
 

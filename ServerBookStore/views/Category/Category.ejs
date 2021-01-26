@@ -40,8 +40,10 @@
           <td><%- cate.name %></td>
           <td>
             <form action="" method="POST">
-              <button type="submit" class="btn btn-info">Detail</button>
-              <button type="submit" class="btn btn-danger">Delete</button>
+              <button type="submit" class="btn btn-danger" name="idCategory" value="<%- cate._id %>">Delete</button>
+            </form>
+            <form action="/book" method="POST">
+              <button type="submit" class="btn btn-info" name='idCategory' value="<%- cate._id %>">Detail</button>
             </form>
           </td>
         </tr>
