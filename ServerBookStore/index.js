@@ -157,7 +157,7 @@ app.post('/addbook',function(req,res){
             
             //Save Book
             var book = new Book({
-                image: req.file.path,
+                image: req.file.filename,
                 name: req.body.txtName,
                 author: req.body.txtAuthor,
                 price: req.body.txtPrice,
@@ -182,7 +182,8 @@ app.post('/addbook',function(req,res){
                             if(err){
                                 res.json({kq:0, 'err': err})
                             }else{
-                                res.json({kq:1})
+                                //res.json({kq:1})
+                                res.redirect('/book')
                             }
                     })
                 }
