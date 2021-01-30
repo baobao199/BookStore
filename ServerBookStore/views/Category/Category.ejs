@@ -20,6 +20,9 @@
       a{
         margin-left: 450px;
       }
+      .btn{
+        display: inline;
+      }
     </style>
 </head>
 <body>
@@ -38,13 +41,16 @@
         <tr>
           <th scope="row"><%- index + 1 %></th>
           <td><%- cate.name %></td>
-          <td>
-            <form action="" method="POST">
-              <button type="submit" class="btn btn-danger" name="idCategory" value="<%- cate._id %>">Delete</button>
-            </form>
-            <form action="/book" method="POST">
-              <button type="submit" class="btn btn-info" name='idCategory' value="<%- cate._id %>">Detail</button>
-            </form>
+          <td> 
+              <form action="/xuly" method="POST">
+                <button type="submit" class="btn btn-danger" name="idCategory" value="<%- cate._id %>">Delete</button>
+              </form>
+              <form action="/book" method="POST">
+                <button type="submit" class="btn btn-info" name='idCategory' value="<%- cate._id %>">Detail</button>
+              </form>
+              <form action="/editcategory" method="POST">
+                <button class="btn btn-warning" name='idCategory' value="<%- cate._id %>">Edit</button>
+              </form>
           </td>
         </tr>
       <% }) %>

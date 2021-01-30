@@ -89,7 +89,7 @@ app.post('/addcategory',function(req,res){
     })
 })
 //delete by id cate
-app.post('/category',function(req,res){
+app.post('/xuly',function(req,res){
     let idCate = req.body.idCategory
     Category.findByIdAndRemove(idCate,function(err){
         if(err){
@@ -120,8 +120,10 @@ app.post('/book',function(req,res){
                 else{
                     for(var i = 0; i < data.length;i++){
                         if(data[i]._id == idCate){
-                            // console.log(data[i].tmp)
                             res.render('Book/book',{listBooks:data[i].tmp})
+                        }
+                        else{
+                            console.log('null')
                         }
                     }
                     
@@ -130,13 +132,37 @@ app.post('/book',function(req,res){
         }
     })
 })
-//get by id cate
-
+//edit
+app.post('/editcategory',function (req,res){
+    idCate = req.body.idCategory
+    Category.findById(idCate,function (err,items) {
+        if(err){
+            console.log(err)
+        }
+        else{
+            res.render('Category/EditCategory',{cate:items})
+        }
+    })
+})
+//update
+app.post('/xuly',function(req,res){
+    txtname = req.body.txtCate
+    id = req.body.txtid
+    Category.findByIdAndUpdate(id,{name: txtname},{new: true},function(err,response){
+        if(err){
+            console.log(err)
+        }
+        else{
+            res.redirect('/category')
+        }
+    })
+})
 //--category
 
 //image
 //multer
 var multer = require('multer')
+const e = require('express')
 var storage = multer.diskStorage({
     destination: function(req,file,cb){
         cb(null,'./public/upload')
