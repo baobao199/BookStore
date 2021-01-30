@@ -100,28 +100,34 @@ app.post('/category',function(req,res){
     })
 })
 app.post('/book',function(req,res){
-
     idCate = req.body.idCategory
-    Category.findById(idCate,function(err,items){
+    Category.findById(idCate,function(err,items){   
         if(err){
             console.log(err)
         }
         else{
-            items.Books_id.forEach(element => {
-                list
-                Book.findById(element,function(err,items){
-                    if(err){
-                        console.log(err)
-                    }
-                    else{
-                        // res.render('Book/book',{listBooks:items})
+            var test = Category.aggregate([{
+                $lookup:{
+                    from : 'books',
+                    localField: 'Books_id',
+                    foreignField: '_id',
+                    as: 'tmp'
+                }
+            }],function(err,data){
+                if(err){
+                    console.log(err)
+                }
+                else{
+                    for(var i = 0; i < data.length;i++){
+                        if(data[i]._id == idCate){
+                            // console.log(data[i].tmp)
+                            res.render('Book/book',{listBooks:data[i].tmp})
+                        }
                     }
                     
-                })
-            }); 
-            
+                }
+            })
         }
-
     })
 })
 //get by id cate
@@ -162,7 +168,7 @@ app.get('/book',function(req,res){
             console.log('err')
         }
         else{
-            //console.log(items)
+            console.log(Book)
             res.render('Book/book',{listBooks:items})
         }
     })
