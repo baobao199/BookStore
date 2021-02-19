@@ -47,7 +47,14 @@ app.post('/api/cate', function(req,res){
 })
 //Model
 app.get('/',function(req,res){
-    res.render('home')
+    Category.find(function(err,items){
+        if(err){
+            console.log('err')
+        }
+        else{
+            res.render('home',{listCategories:items})
+        }
+    })
 })
 app.get('/cate',function(req,res){
     res.render('cate')
@@ -132,6 +139,7 @@ app.post('/book',function(req,res){
         }
     })
 })
+
 //edit
 app.post('/editcategory',function (req,res){
     idCate = req.body.idCategory
