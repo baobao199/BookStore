@@ -4,61 +4,51 @@
     <title>List Book</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
-    <style>
-      h1{
-        text-align: center;
-      }
-      .table{
-        width: 1200px;
-        margin-left: auto;
-        margin-right: auto;
-      }
-      a{
-        margin-left: 250px;
-      }
-    </style>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
 <body>
-  <h1>LIST OF BOOKS</h1>
-  <a href="/addbook"><button type="button" class="btn btn-info">Add New Book</button></a>
-  <table class="table">
-    <thead>
-      <tr>
-        <th scope="col">No</th>
-        <th scope="col">Image</th>
-        <th scope="col">Book</th>
-        <th scope="col">Author</th>
-        <th scope="col">Price</th>
-        <th scope="col">Publishing Company</th>
-        <th scope="col">Date Public</th>
-        <th scope="col">Description</th>
-        <th scope="col">Action</th>
-      </tr>
-    </thead>
-    <tbody>
-        <% listBooks.forEach(function(book,index){ %>
+  <%- include('../template/nav.ejs') %>
+  <div class="container">
+    <h1>LIST OF BOOKS</h1>
+    <a href="/addbook"><button type="button" class="btn btn-info">Add New Book</button></a>
+    <table class="table">
+      <thead>
         <tr>
-            <th scope="row"><%- index + 1 %></th>
-            <td><img src='/upload/<%- book.image %>' width="50" height="90"></td>
-            <td><%- book.name %></td>
-            <td><%- book.author %></td>
-            <td><%- book.price %> đ</td>
-            <td><%- book.pubCompany %></td>
-            <td><%- book.datePublic %></td>
-            <td><%- book.description %></td>
-            <td>
-                <form action="" method="POST">
-                    <button type="submit" class="btn btn-info">Edit</button>
-                    <button type="submit" class="btn btn-danger">Delete</button>
-                  </form>
-            </td>
-          </tr>
-        <% }) %>
-    </tbody>
-  </table>
+          <th scope="col">No</th>
+          <th scope="col">Image</th>
+          <th scope="col">Book</th>
+          <th scope="col">Author</th>
+          <th scope="col">Price</th>
+          <th scope="col">Publishing Company</th>
+          <th scope="col">Date Public</th>
+          <th scope="col">Description</th>
+          <th scope="col">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+          <% listBooks.forEach(function(book,index){ %>
+          <tr>
+              <th scope="row"><%- index + 1 %></th>
+              <td><img src='/upload/<%- book.image %>' width="50" height="90"></td>
+              <td><%- book.name %></td>
+              <td><%- book.author %></td>
+              <td><%- book.price %> đ</td>
+              <td><%- book.pubCompany %></td>
+              <td><%- book.datePublic %></td>
+              <td><%- book.description %></td>
+              <td>
+                  <form action="/editbook" method="POST">
+                      <button type="submit" class="btn btn-info" name ='idBook' value="<%- book._id %>">Edit</button>
+                      <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+              </td>
+            </tr>
+          <% }) %>
+      </tbody>
+    </table>
+  </div>
 </body>
 </html>
