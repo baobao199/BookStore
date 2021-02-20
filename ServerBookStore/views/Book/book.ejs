@@ -42,8 +42,10 @@
               <td>
                   <form action="/editbook" method="POST">
                       <button type="submit" class="btn btn-info" name ='idBook' value="<%- book._id %>">Edit</button>
-                      <button type="submit" class="btn btn-danger">Delete</button>
-                    </form>
+                  </form>
+                  <form action='/xuly3' method="POST">
+                      <button type="submit" class="btn btn-danger" name ='idBook' value="<%- book._id %>">Delete</button>
+                  </form>
               </td>
             </tr>
           <% }) %>

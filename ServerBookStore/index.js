@@ -97,7 +97,7 @@ app.post('/addcategory',function(req,res){
 })
 
 //delete by id cate
-app.post('/xuly',function(req,res){
+app.post('/xuly1',function(req,res){
     let idCate = req.body.idCategory
     Category.findByIdAndRemove(idCate,function(err){
         if(err){
@@ -322,24 +322,35 @@ app.post('/editbook',function (req,res){
         if(err){
             console.log(err)
         }else{
-            Category.find(function(err,items){
-                if(err){
-                    console.log('Error')
-                }
-                else{
-                    res.render('book/editbook',{Cates:items,book:itemBook})
-                }
-            })
+            res.render('book/editbook',{book:itemBook})
         }
     })
 })
-app.post('/xulyedit',function(req,res) {
-    // txtName = req.body.txtName
-    // txtAuthor = req.body.txtAuthor
-    // txtPrice = req.body.txtPrice
-    // txtPubCompany = req.body.txtPubCompany
-    // txtDatePublic = req.body.txtDatePublic
-    // txtDescrip = req.body.txtDescrip
+app.post('/xuly2',function(req,res){
+    txtName = req.body.txtName
+    txtId = req.body.id
+    txtAuthor = req.body.txtAuthor
+    txtPrice = req.body.txtPrice
+    txtPubCompany = req.body.txtPubCompany
+    txtDatePublic = req.body.txtDatePublic
+    txtDescrip = req.body.txtDescrip
 
-    // console.log(req.body.txtDescrip)
+    Book.findByIdAndUpdate(txtId,{name: txtName, author: txtAuthor, price: txtPrice, pubCompany: txtPubCompany, datePublic: txtDatePublic, description: txtDescrip},{new: true},function(err,response){
+        if(err){
+            console.log(err)
+        }
+        else{
+            res.redirect('/book')
+        }
+    })
+})
+app.post('/xuly3',function(req,res){
+    let idBook = req.body.idBook
+    Book.findByIdAndRemove(idBook,function(err){
+        if(err){
+            console.log('err')
+        }else{
+            res.redirect('/book')    
+        }
+    })
 })

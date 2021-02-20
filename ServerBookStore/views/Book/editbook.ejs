@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Add Book</title>
+    <title>Edit Book</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -21,19 +21,11 @@
     </style>
 </head>
 <body>
-  <h1>ADD NEW BOOK</h1>
-    <form action="/xulyedit" method="POST" enctype="multipart/form-data">
+  <h1>EDIT BOOK</h1>
+    <form action="/xuly2" method="POST">
         <div class="form-group">
             <label>ID</label>
             <input type="text" class="form-control" id="exampleInputEmail1" name='id' value="<%- book._id %>">
-        </div>
-        <div class="form-group">
-            <label>Choose type of book</label>
-            <select class="form-control form-control-lg" name='selectCate'>
-                <% Cates.forEach(function(cate){ %>
-                    <option value="<%- cate._id %>"><%- cate.name %></option>
-                <% }) %>
-            </select>
         </div>
         <div class="form-group">
             <label>Name</label>
@@ -58,10 +50,6 @@
         <div class="form-group">
             <label>Description</label>
             <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="txtDescrip"><%- book.description %></textarea>
-        </div>
-        <div class="form-group">
-            <label for="exampleFormControlFile1">Image</label>
-            <input type="file" class="form-control-file" id="exampleFormControlFile1" name="txtImage">
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
