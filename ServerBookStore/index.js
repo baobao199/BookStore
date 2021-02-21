@@ -1,5 +1,6 @@
 const express = require('express')
 const bodyParser = require('body-parser')
+var session = require('express-session');
 const app = express()
 
 app.set('view engine','ejs')
@@ -10,6 +11,7 @@ app.use(express.static('public'))
 // app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:true}))
 //--body-parser
+app.use(session({secret:'secret_pass_here'}))
 
 app.listen(3000);
 //set up
@@ -48,14 +50,12 @@ app.post('/api/cate', function(req,res){
 })
 //Model
 app.get('/home',function(req,res){
-    Category.find(function(err,items){
-        if(err){
-            console.log('err')
-        }
-        else{
-            res.render('home')
-        }
-    })
+    if(!req.session.user){
+        res.redirect('/login')
+    }
+    else{
+        res.render('home')
+    }
 })
 app.get('/cate',function(req,res){
     res.render('cate')
@@ -356,7 +356,13 @@ app.post('/xuly3',function(req,res){
 })
 
 app.get('/login',function(req,res){
-    res.render('admin/login')
+    if(req.session.user){
+        res.redirect('/home')
+    }
+    else{
+        res.render('admin/login')
+    }
+   
 })
 app.post('/login',function(req,res){
     txtemail = req.body.email
@@ -368,10 +374,15 @@ app.post('/login',function(req,res){
         else{
             items.forEach(function (account) {
                 if( txtemail == account.username && txtpass == account.password){
+                    req.session.user = account.username
                     res.render('home')
                 }
             })
-            res.render('admin/login',{message:'Username or password is not correct'})
+           res.render('admin/login',{message:'Username or password is not correct'})
         }
     })
+})
+
+app.post('/profile',function(req,res){
+    
 })
