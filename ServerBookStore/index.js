@@ -34,6 +34,7 @@ mongoose.connect('mongodb+srv://baobao199:baobao199@cluster0.c12op.mongodb.net/B
 //add Model
 const Category = require('./Models/Category')
 const Book = require('./Models/Book')
+const Account = require('./Models/Account')
 
 //postman
 app.post('/api/cate', function(req,res){
@@ -204,7 +205,6 @@ app.get('/book',function(req,res){
             console.log('err')
         }
         else{
-            console.log(Book)
             res.render('Book/book',{listBooks:items})
         }
     })
@@ -351,6 +351,27 @@ app.post('/xuly3',function(req,res){
             console.log('err')
         }else{
             res.redirect('/book')    
+        }
+    })
+})
+
+app.get('/login',function(req,res){
+    res.render('admin/login')
+})
+app.post('/login',function(req,res){
+    txtemail = req.body.email
+    txtpass = req.body.pswd
+    Account.find(function(err,items) {
+        if(err){
+            console.log(err)
+        }
+        else{
+            items.forEach(function (account) {
+                if( txtemail == account.username && txtpass == account.password){
+                    res.render('home')
+                }
+            })
+            res.render('admin/login',{message:'Username or password is not correct'})
         }
     })
 })
