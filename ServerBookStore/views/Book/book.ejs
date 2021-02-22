@@ -13,7 +13,7 @@
   <%- include('../template/nav.ejs') %>
   <div class="container">
     <h1>LIST OF BOOKS</h1>
-    <a href="/addbook"><button type="button" class="btn btn-info">Add New Book</button></a>
+    <a href="/book/add"><button type="button" class="btn btn-info">Add New Book</button></a>
     <table class="table">
       <thead>
         <tr>
@@ -40,10 +40,10 @@
               <td><%- book.datePublic %></td>
               <td><%- book.description %></td>
               <td>
-                  <form action="/editbook" method="POST">
+                  <form action="/book/edit" method="POST">
                       <button type="submit" class="btn btn-info" name ='idBook' value="<%- book._id %>">Edit</button>
                   </form>
-                  <form action='/xuly3' method="POST">
+                  <form action='/book/delete' method="POST">
                       <button type="submit" class="btn btn-danger" name ='idBook' value="<%- book._id %>">Delete</button>
                   </form>
               </td>

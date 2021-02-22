@@ -33,10 +33,6 @@ mongoose.connect('mongodb+srv://baobao199:baobao199@cluster0.c12op.mongodb.net/B
         console.log("MongoDB connected successfully")
     }
 });
-//add Model
-const Category = require('./Models/Category')
-const Book = require('./Models/Book')
-const Account = require('./Models/Account')
 
 //postman
 app.post('/api/cate', function(req,res){
@@ -48,7 +44,15 @@ app.post('/api/cate', function(req,res){
         }
     })
 })
-//Model
+
+app.get('/',function(req,res){
+    if(!req.session.user){
+        res.redirect('/login')
+    }
+    else{
+        res.render('home')
+    }
+})
 app.get('/home',function(req,res){
     if(!req.session.user){
         res.redirect('/login')
@@ -57,332 +61,25 @@ app.get('/home',function(req,res){
         res.render('home')
     }
 })
-app.get('/cate',function(req,res){
-    res.render('cate')
-})
-//--model
 
-//get list categories from mongoDB
-app.get('/category',function(req,res){
-    Category.find(function(err,items){
-        if(err){
-            console.log('err')
-        }
-        else{
-            res.render('Category/Category',{listCategories:items})
-        }
-    })
-})
-app.get('/addcategory',function(req,res){
-    res.render('Category/AddCategory')
-})
+var categoryRoutes = require('./routes/category');
+app.use("/category", categoryRoutes);
+app.use("/category/add", categoryRoutes);
+app.use("/upload", categoryRoutes);
+app.use("/edit", categoryRoutes);
+app.use("/update", categoryRoutes);
+app.use("/delete", categoryRoutes);
+app.use("", categoryRoutes);
 
-app.post('/addcategory',function(req,res){
-    //res.send(req.body.txtCate)
-    var newCate = new Category({
-        name: req.body.txtCate,
-        Books_id: []
-    })
-    //res.json(newCate)
-    newCate.save(function(err){
-        if(err){
-            console.log('Save cate error: '+err)
-            res.json({kq:0})
-        }
-        else{
-            console.log('Save successfully')
-            //res.json({kq:1})
-            res.redirect('/category');
-        }
-    })
-})
+var bookRoutes = require('./routes/book');
+app.use("/book", bookRoutes);
+app.use("/book/add", bookRoutes);
+app.use("/upload", bookRoutes);
+app.use("/edit", bookRoutes);
+app.use("/update", bookRoutes);
+app.use("/delete", bookRoutes);
 
-//delete by id cate
-app.post('/xuly1',function(req,res){
-    let idCate = req.body.idCategory
-    Category.findByIdAndRemove(idCate,function(err){
-        if(err){
-            console.log('err')
-        }else{
-            res.redirect('/category')    
-        }
-    })
-})
-
-app.post('/book',function(req,res){
-    idCate = req.body.idCategory
-    Category.findById(idCate,function(err,items){   
-        if(err){
-            console.log(err)
-        }
-        else{
-            var test = Category.aggregate([{
-                $lookup:{
-                    from : 'books',
-                    localField: 'Books_id',
-                    foreignField: '_id',
-                    as: 'tmp'
-                }
-            }],function(err,data){
-                if(err){
-                    console.log(err)
-                }
-                else{
-                    for(var i = 0; i < data.length;i++){
-                        if(data[i]._id == idCate){
-                            res.render('Book/book',{listBooks:data[i].tmp})
-                        }
-                        else{
-                            console.log('null')
-                        }
-                    }
-                    
-                }
-            })
-        }
-    })
-})
-
-//edit
-app.post('/editcategory',function (req,res){
-    idCate = req.body.idCategory
-    Category.findById(idCate,function (err,items) {
-        if(err){
-            console.log(err)
-        }
-        else{
-            res.render('Category/EditCategory',{cate:items})
-        }
-    })
-})
-//update
-app.post('/xuly',function(req,res){
-    txtname = req.body.txtCate
-    id = req.body.txtid
-    Category.findByIdAndUpdate(id,{name: txtname},{new: true},function(err,response){
-        if(err){
-            console.log(err)
-        }
-        else{
-            res.redirect('/category')
-        }
-    })
-})
-//--category
-
-//image
-//multer
-var multer = require('multer')
-const e = require('express')
-var storage = multer.diskStorage({
-    destination: function(req,file,cb){
-        cb(null,'./public/upload')
-    },
-    filename: function(req,file,cb){
-        cb(null,Date.now()+"-"+file.originalname) //cau hinh ten file tranh trunn file
-    }
-})
-var upload = multer({
-    storage: storage,
-    fileFilter: function(req,file,cb){
-        console.log(file)
-        if( file.mimetype=='image/jpg' || 
-            file.mimetype=='image/png' ||
-            file.mimetype=='image/jpeg')
-        {
-            cb(null,true)
-        }
-        else{
-            return cb(new Error('Only image are allowed'))
-        }
-    }
-}).single('txtImage') //name thu muc hinh o form
-//--image
-
-app.get('/book',function(req,res){
-    Book.find(function(err,items){
-        if(err){
-            console.log('err')
-        }
-        else{
-            res.render('Book/book',{listBooks:items})
-        }
-    })
-    
-})
-
-app.get('/addbook',function(req,res){
-    Category.find(function(err,items){
-        if(err){
-            console.log('Error')
-        }
-        else{
-            console.log(items)
-            res.render('Book/addbook',{Cates:items})
-        }
-    })
-})
-app.post('/addbook',function(req,res){
-    upload(req,res, function(err){
-        if(err instanceof multer.MulterError){
-            console.log('A Multer error occurred when uploading')
-            res.json({kq: 0, 'err: ': err})
-        }else if(err){
-            console.log('An unknown error occurred when uploading: '+err)
-            res.json({kq: 0, 'err': err})
-        }else{
-            console.log('Upload is okay')
-            console.log(req.file) //thong tin file da upload
-            //res.send({kq:1, 'file': req.file})
-            
-            //Save Book
-            var book = new Book({
-                image: req.file.filename,
-                name: req.body.txtName,
-                author: req.body.txtAuthor,
-                price: req.body.txtPrice,
-                pubCompany: req.body.txtPubCompany,
-                datePublic: req.body.txtDatePublic,
-                description: req.body.txtDescrip,
-            })
-            //res.json(book)
-            book.save(function(err){
-                if(err){
-                    res.json({
-                        kq:0,
-                        'err': "error upload book"
-                    })
-                }
-                else{
-                    //save book
-                    Category.findOneAndUpdate(
-                        {_id:req.body.selectCate},
-                        { $push: {Books_id: book._id} },
-                        function(err){
-                            if(err){
-                                res.json({kq:0, 'err': err})
-                            }else{
-                                //res.json({kq:1})
-                                res.redirect('/book')
-                            }
-                    })
-                }
-            })
-        }
-    })
-})
-app.post('/book',function(req,res){
-    //upload image
-    upload(req,res, function(err){
-        if(err instanceof multer.MulterError){
-            console.log('A Multer error occurred when uploading')
-            res.json({kq: 0, 'err: ': err})
-        }else if(err){
-            console.log('An unknown error occurred when uploading: '+err)
-            res.json({kq: 0, 'err': err})
-        }else{
-            console.log('Upload is okay')
-            console.log(req.file) //thong tin file da upload
-            //res.send({kq:1, 'file': req.file})
-            
-            //Save Book
-            var book = new Book({
-                name: req.body.txtName,
-                image: req.file.fieldname,
-                file: req.file.txtFile
-            })
-            //res.json(book)
-            book.save(function(err){
-                if(err){
-                    res.json({
-                        kq:0,
-                        'err': "error upload book"
-                    })
-                }
-                else{
-                    //save book
-                    Category.findOneAndUpdate(
-                        {_id:req.body.selectCate},
-                        { $push: {Books_id: book._id} },
-                        function(err){
-                            if(err){
-                                res.json({kq:0, 'err': err})
-                            }else{
-                                res.json({kq:1})
-                            }
-                    })
-                }
-            })
-        }
-    })
-})
-app.post('/editbook',function (req,res){
-    txtIdBook = req.body.idBook
-    Book.findById(txtIdBook,function(err,itemBook) {
-        if(err){
-            console.log(err)
-        }else{
-            res.render('book/editbook',{book:itemBook})
-        }
-    })
-})
-app.post('/xuly2',function(req,res){
-    txtName = req.body.txtName
-    txtId = req.body.id
-    txtAuthor = req.body.txtAuthor
-    txtPrice = req.body.txtPrice
-    txtPubCompany = req.body.txtPubCompany
-    txtDatePublic = req.body.txtDatePublic
-    txtDescrip = req.body.txtDescrip
-
-    Book.findByIdAndUpdate(txtId,{name: txtName, author: txtAuthor, price: txtPrice, pubCompany: txtPubCompany, datePublic: txtDatePublic, description: txtDescrip},{new: true},function(err,response){
-        if(err){
-            console.log(err)
-        }
-        else{
-            res.redirect('/book')
-        }
-    })
-})
-app.post('/xuly3',function(req,res){
-    let idBook = req.body.idBook
-    Book.findByIdAndRemove(idBook,function(err){
-        if(err){
-            console.log('err')
-        }else{
-            res.redirect('/book')    
-        }
-    })
-})
-
-app.get('/login',function(req,res){
-    if(req.session.user){
-        res.redirect('/home')
-    }
-    else{
-        res.render('admin/login')
-    }
-   
-})
-app.post('/login',function(req,res){
-    txtemail = req.body.email
-    txtpass = req.body.pswd
-    Account.find(function(err,items) {
-        if(err){
-            console.log(err)
-        }
-        else{
-            items.forEach(function (account) {
-                if( txtemail == account.username && txtpass == account.password){
-                    req.session.user = account.username
-                    res.render('home')
-                }
-            })
-           res.render('admin/login',{message:'Username or password is not correct'})
-        }
-    })
-})
-
-app.post('/profile',function(req,res){
-    
-})
+var accountRoutes = require('./routes/account');
+app.use("/login", accountRoutes);
+app.use("/process", accountRoutes);
+app.use("",accountRoutes); //logout

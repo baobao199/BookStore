@@ -15,7 +15,7 @@
   <%- include('../template/nav.ejs') %>
   <div class="container">
     <h1>LIST OF BOOK TYPES OR GENRES</h1>
-    <a href="/addcategory"><button type="button" class="btn btn-info">Add Genre</button></a>
+    <a href="/category/add"><button type="button" class="btn btn-info">Add Genre</button></a>
     <table class="table">
       <thead>
         <tr>
@@ -30,13 +30,13 @@
             <th scope="row"><%- index + 1 %></th>
             <td><%- cate.name %></td>
             <td> 
-                <form action="/xuly1" method="POST">
+                <form action="/category/delete" method="POST">
                   <button type="submit" class="btn btn-danger" name="idCategory" value="<%- cate._id %>">Delete</button>
                 </form>
                 <form action="/book" method="POST">
                   <button type="submit" class="btn btn-info" name='idCategory' value="<%- cate._id %>">Detail</button>
                 </form>
-                <form action="/editcategory" method="POST">
+                <form action="/category/edit" method="POST">
                   <button class="btn btn-warning" name='idCategory' value="<%- cate._id %>">Edit</button>
                 </form>
             </td>
