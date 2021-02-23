@@ -27,3 +27,20 @@ module.exports.logoutAccount = async function (req,res) {
     req.session.destroy();
     res.redirect('/login')
 }
+
+module.exports.profileAccount = async function (req,res) {
+    Account.find(function(err,items) {
+        if(err){
+            console.log(err)
+        }
+        else{
+            items.forEach(function (account) {
+                if( req.session.user == account.username){
+                    console.log(account)
+                    res.render('Admin/profile',{list:account})
+                }
+            })
+            
+        }
+    })
+}
