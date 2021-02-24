@@ -83,4 +83,5 @@ var accountRoutes = require('./routes/account');
 app.use("/login", accountRoutes);
 app.use("/profile", accountRoutes);
 app.use("/process", accountRoutes);
+app.use("/editprofile", accountRoutes)
 app.use("",accountRoutes); //logout

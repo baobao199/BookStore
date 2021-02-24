@@ -44,3 +44,7 @@ module.exports.profileAccount = async function (req,res) {
         }
     })
 }
+
+module.exports.editProfile = async function(req,res) {
+    res.render('admin/editprofile')
+}
